@@ -16,7 +16,7 @@ function setup() {
   //bullet = new Bullet(circle.pos.x, circle.pos.y);
 
   //create little dots to eat
-  for (var i = 0; i < 100; i++) {
+  for (var i = 0; i < 500; i++) {
 
     if(random(0,10) < 8){
       food[i] = new Circle(random(-width*2,width*2), random(-height*2, height*2), 12);
@@ -55,6 +55,7 @@ function draw() {
   //show initial circle and update position when moved
   circle.showCircle();
   circle.update();
+  circle.constrain();
 
   //show all little dots to eat
   for (var i = food.length - 1; i >= 0; i--) {

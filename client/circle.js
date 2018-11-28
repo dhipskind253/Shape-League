@@ -50,6 +50,11 @@ class Circle {
       }
       return false;
     }
+
+    constrain(){
+      circle.pos.x = constrain(circle.pos.x, -width*4, width*4);
+      circle.pos.y = constrain(circle.pos.y, -height*4, height*4);
+    }
   
     showCircle() {
         fill(200,123,33);
