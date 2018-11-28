@@ -53,6 +53,12 @@ function draw() {
   for (var i = food.length - 1; i >= 0; i--) {
     if (circle.eat(food[i])) {
       food.splice(i, 1);
+      if(random(0,10) < 7){
+        snack = new Circle(random(-width*2,width*2), random(-height*2, height*2), 16);
+      } else {
+        snack = new Circle(random(-width*2,width*2), random(-height*2, height*2), 15)
+      }
+      food.push(snack);
     }
     else {
       if(food[i].r == 15){
