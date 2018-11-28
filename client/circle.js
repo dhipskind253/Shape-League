@@ -3,7 +3,7 @@ class Circle {
     constructor(x, y, r) {
         this.pos = createVector(x, y);
         this.r = r;
-        this.health = 0;
+        this.health = 50;
     }
     
     update() {
@@ -28,7 +28,7 @@ class Circle {
   
       //gets magnitude and sets it so movement is based on magnitude
       var magnitude = sqrt(m);
-      mouse.setMag(magnitude * 1/3);
+      mouse.setMag(magnitude * 0.33);
       this.pos.add(mouse);
     }
   
@@ -41,7 +41,7 @@ class Circle {
         this.r = sqrt(newArea / PI);*/
   
         //updates objects health if food is eaten
-        if(food.r == 15){
+        if(food.r == 16){
           this.health = this.health + 25;
         } else {
           this.health = this.health + 5;

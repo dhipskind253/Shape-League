@@ -36,7 +36,7 @@ class Bullet {
       
       //if it goes half way into the other blob then detract health
       if (dist < this.r + enemy.r) {
-        //enemy health is deducted by d (damage)
+        enemy.health -= this.health
         return true;
       }
       return false;
