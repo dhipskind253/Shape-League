@@ -16,12 +16,12 @@ function setup() {
   //bullet = new Bullet(circle.pos.x, circle.pos.y);
 
   //create little dots to eat
-  for (var i = 0; i < 100; i++) {
+  for (var i = 0; i < 500; i++) {
 
     if(random(0,10) < 7){
-      food[i] = new Circle(random(-width*2,width*2), random(-height*2, height*2), 16);
+      food[i] = new Circle(random(-width*4,width*4), random(-height*4, height*4), 16);
     } else {
-      food[i] = new Circle(random(-width*2,width*2), random(-height*2, height*2), 15)
+      food[i] = new Circle(random(-width*4,width*4), random(-height*4, height*4), 15)
     }
   }
 }
@@ -54,15 +54,16 @@ function draw() {
   //show initial circle and update position when moved
   circle.showCircle();
   circle.update();
+  circle.constrain();
 
   //show all little dots to eat
   for (var i = food.length - 1; i >= 0; i--) {
     if (circle.eat(food[i])) {
       food.splice(i, 1);
       if(random(0,10) < 7){
-        snack = new Circle(random(-width*2,width*2), random(-height*2, height*2), 16);
+        snack = new Circle(random(-width*4,width*4), random(-height*4, height*4), 16);
       } else {
-        snack = new Circle(random(-width*2,width*2), random(-height*2, height*2), 15)
+        snack = new Circle(random(-width*4,width*4), random(-height*4, height*4), 15)
       }
       food.push(snack);
     }
