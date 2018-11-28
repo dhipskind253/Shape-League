@@ -1,3 +1,5 @@
+var socket;
+
 var circle;
 var food = [];
 var slowScale = 1;
@@ -5,6 +7,10 @@ var bullets = [];
 
 function setup() {
   createCanvas(window.innerWidth, window.innerHeight);
+
+  //start socket connection to the server
+  socket = io.connect('http://localhost:2000');
+
   circle = new Circle(0, 0, 64);
   
   //bullet = new Bullet(circle.pos.x, circle.pos.y);
