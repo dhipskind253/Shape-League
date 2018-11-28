@@ -1,15 +1,3 @@
-/*class Circle {
-    constructor() {
-        this.pos = createVector(width/2, height/2);
-        this.r = 50;
-    }
-    
-    show() {
-        fill(255);
-        ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2);
-    }
-}*/
-
 //class for any circle on screen (Player Circles and food)
 class Circle {
     constructor(x, y, r) {
@@ -47,7 +35,7 @@ class Circle {
     eat(food) {
       var dist = p5.Vector.dist(this.pos, food.pos);
       
-      //if it goes half way into the other blob then eat it and add areas
+      //if it goes half way into the other blob then eat it and add health
       if (dist < this.r + food.r/2) {
         /*var newArea = PI * food.r * food.r  + PI * this.r * this.r;
         this.r = sqrt(newArea / PI);*/
@@ -63,10 +51,6 @@ class Circle {
       return false;
     }
   
-    shoot() {
-  
-    }
-  
     showCircle() {
         fill(200,123,33);
         ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2);
@@ -78,30 +62,6 @@ class Circle {
   
     showHealth(){
       fill(100,255,0);
-      ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2);
-    }
-  }
-  
-  class Bullet {
-    constructor(x, y, d) {
-      this.pos = createVector(x, y);
-      this.r = 8;
-      this.d = d;
-    }
-  
-    hit(enemy) {
-      var dist = p5.Vector.dist(this.pos, enemy.pos);
-      
-      //if it goes half way into the other blob then detract health
-      if (dist < this.r + enemy.r) {
-        //enemy health is deducted by d (damage)
-        return true;
-      }
-      return false;
-    }
-  
-    showBullet() {
-      fill(255);
       ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2);
     }
   }
