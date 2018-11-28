@@ -38,7 +38,7 @@ function draw() {
   //translate the position of the character
   translate(-circle.pos.x, -circle.pos.y);
 
-  //show bullet only on mouse press and move it
+  //show bullet and move it
   for(var i = 0; i < bullets.length; i++){
     bullets[i].showBullet();
     bullets[i].move();
@@ -56,8 +56,10 @@ function draw() {
     }
     else {
       if(food[i].r == 15){
+        //show green food
         food[i].showHealth();
       } else {
+        //show white food
         food[i].showFood();
       }
     }
