@@ -1,10 +1,13 @@
 var circle;
 var food = [];
 var slowScale = 1;
+var bullets = [];
 
 function setup() {
   createCanvas(window.innerWidth, window.innerHeight);
   circle = new Circle(0, 0, 64);
+  
+  //bullet = new Bullet(circle.pos.x, circle.pos.y);
 
   //create little dots to eat
   for (var i = 0; i < 100; i++) {
@@ -35,6 +38,13 @@ function draw() {
   //translate the position of the character
   translate(-circle.pos.x, -circle.pos.y);
 
+  //show bullet and move it
+  for(var i = 0; i < bullets.length; i++){
+    bullets[i].showBullet();
+    bullets[i].move();
+  }
+
+
   //show initial circle and update position when moved
   circle.showCircle();
   circle.update();
@@ -46,10 +56,19 @@ function draw() {
     }
     else {
       if(food[i].r == 15){
+        //show green food
         food[i].showHealth();
       } else {
+        //show white food
         food[i].showFood();
       }
     }
+  }
+}
+
+function mousePressed(){
+  if(mouseIsPressed){
+    var bullet = new Bullet(circle.pos.x, circle.pos.y);
+    bullets.push(bullet);
   }
 }
