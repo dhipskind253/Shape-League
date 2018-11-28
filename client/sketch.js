@@ -29,11 +29,6 @@ function setup() {
 function draw() {
   background(0);
 
-  fill(255);
-  noStroke();
-  textSize(20);
-  text(circle.health, 30, 30);
-
   //translate the position to the center
   translate(width/2, height/2);
   slowScale = lerp(slowScale, (32 / circle.r), 0.1);
@@ -55,6 +50,12 @@ function draw() {
   circle.showCircle();
   circle.update();
   circle.constrain();
+
+  fill(255);
+  noStroke();
+  textAlign(CENTER);
+  textSize(30);
+  text(circle.health, circle.pos.x, circle.pos.y);
 
   //show all little dots to eat
   for (var i = food.length - 1; i >= 0; i--) {

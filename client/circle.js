@@ -3,7 +3,7 @@ class Circle {
     constructor(x, y, r) {
         this.pos = createVector(x, y);
         this.r = r;
-        this.health = 0;
+        this.health = 100;
     }
     
     update() {
@@ -42,7 +42,7 @@ class Circle {
   
         //updates objects health if food is eaten
         if(food.r == 15){
-          this.health = this.health + 25;
+          this.health = this.health + 15;
         } else {
           this.health = this.health + 5;
         }
