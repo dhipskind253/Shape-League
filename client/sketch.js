@@ -13,8 +13,6 @@ function setup() {
 
   circle = new Circle(0, 0, 64);
   
-  //bullet = new Bullet(circle.pos.x, circle.pos.y);
-
   //create little dots to eat
   for (var i = 0; i < 500; i++) {
 
