@@ -70,3 +70,4 @@ class Circle {
       ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2);
     }
   }
+  
