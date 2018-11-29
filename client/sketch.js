@@ -16,10 +16,10 @@ function setup() {
   //create little dots to eat
   for (var i = 0; i < 500; i++) {
 
-    if(random(0,10) < 7){
-      food[i] = new Circle(random(-width*4,width*4), random(-height*4, height*4), 16);
+    if(random(0,10) < 8){
+      food[i] = new Circle(random(-width*4,width*4), random(-height*4, height*4), 12);
     } else {
-      food[i] = new Circle(random(-width*4,width*4), random(-height*4, height*4), 15)
+      food[i] = new Circle(random(-width*4,width*4), random(-height*4, height*4), 16)
     }
   }
 }
@@ -38,9 +38,10 @@ function draw() {
   translate(-circle.pos.x, -circle.pos.y);
 
   //show bullet and move it
-  for(var i = 0; i < bullets.length; i++){
+  for(var i = bullets.length - 1; i >= 0; i--){
     bullets[i].showBullet();
     bullets[i].move();
+
   }
 
 
@@ -59,15 +60,15 @@ function draw() {
   for (var i = food.length - 1; i >= 0; i--) {
     if (circle.eat(food[i])) {
       food.splice(i, 1);
-      if(random(0,10) < 7){
-        snack = new Circle(random(-width*4,width*4), random(-height*4, height*4), 16);
+      if(random(0,10) < 8){
+        snack = new Circle(random(-width*4,width*4), random(-height*4, height*4), 12);
       } else {
-        snack = new Circle(random(-width*4,width*4), random(-height*4, height*4), 15)
+        snack = new Circle(random(-width*4,width*4), random(-height*4, height*4), 16)
       }
       food.push(snack);
     }
     else {
-      if(food[i].r == 15){
+      if(food[i].r == 16){
         //show green food
         food[i].showHealth();
       } else {

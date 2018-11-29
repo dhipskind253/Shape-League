@@ -28,7 +28,7 @@ class Circle {
   
       //gets magnitude and sets it so movement is based on magnitude
       var magnitude = sqrt(m);
-      mouse.setMag(magnitude * 1/3);
+      mouse.setMag(magnitude * 0.33);
       this.pos.add(mouse);
     }
   
