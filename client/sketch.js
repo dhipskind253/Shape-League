@@ -1,9 +1,12 @@
 var socket;
+var id;
 
 var circle;
 var food = [];
+var enemies = [];
 var slowScale = 1;
 var bullets = [];
+
 
 function setup() {
   createCanvas(window.innerWidth, window.innerHeight);
@@ -11,17 +14,28 @@ function setup() {
   //start socket connection to the server
   socket = io.connect('http://localhost:2000');
 
-  circle = new Circle(0, 0, 64);
-  
-  //bullet = new Bullet(circle.pos.x, circle.pos.y);
+  circle = new Circle(0, 0, 64, 100);
 
+  var data = {
+    x: circle.pos.x,
+    y: circle.pos.y,
+    r: circle.r,
+    health: circle.health
+  };
+  socket.emit('start', data);
+
+  socket.on('heartbeat', function(data){
+    enemies = data;
+  });
+
+  
   //create little dots to eat
   for (var i = 0; i < 500; i++) {
 
     if(random(0,10) < 8){
-      food[i] = new Circle(random(-width*2,width*2), random(-height*2, height*2), 12);
+      food[i] = new Circle(random(-2000,2000), random(-2000, 2000), 12);
     } else {
-      food[i] = new Circle(random(-width*2,width*2), random(-height*2, height*2), 16)
+      food[i] = new Circle(random(-2000,2000), random(-2000, 2000), 16)
     }
   }
 }
@@ -46,11 +60,33 @@ function draw() {
 
   }
 
+  //draw the enemies on screen
+  for (var i = enemies.length - 1; i >=0; i--){
+    var enemId = enemies[i].id;
+    if(enemId !== socket.id){
+      fill(255, 0, 0);
+      ellipse(enemies[i].x, enemies[i].y, enemies[i].r * 2, enemies[i].r * 2);
+
+      fill(255);
+      textAlign(CENTER);
+      textSize(30);
+      text(enemies[i].health,enemies[i].x, enemies[i].y);
+    }
+  }
+
 
   //show initial circle and update position when moved
   circle.showCircle();
   circle.update();
   circle.constrain();
+
+  var data = {
+    x: circle.pos.x,
+    y: circle.pos.y,
+    r: circle.r,
+    health: circle.health
+  };
+  socket.emit('update', data);
 
   fill(255);
   noStroke();
@@ -63,9 +99,9 @@ function draw() {
     if (circle.eat(food[i])) {
       food.splice(i, 1);
       if(random(0,10) < 8){
-        snack = new Circle(random(-width*2,width*2), random(-height*2, height*2), 12);
+        snack = new Circle(random(-2000,2000), random(-2000, 2000), 12);
       } else {
-        snack = new Circle(random(-width*2,width*2), random(-height*2, height*2), 16)
+        snack = new Circle(random(-2000,2000), random(-2000, 2000), 16)
       }
       food.push(snack);
     }
