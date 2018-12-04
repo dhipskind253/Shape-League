@@ -2,21 +2,20 @@ class Bullet {
     constructor(x, y) {
       this.x = x;
       this.y = y;
-      this.pos = createVector(this.x, this.y);
+      this.mx = mouseX - width/2;
+      this.my = mouseY - height/2;
+      this.pos = createVector(x,y);
       this.r = 15;
     }
 
     move(){
-        var mx = mouseX - width/2;
-        var my = mouseY - height/2;
-
         var m;
-        if(mx > 0 && my < 0){
-            m = mx - my;
-        } else if(mx < 0 && my > 0){
-            m = my - mx;
+        if(this.mx > 0 && this.my < 0){
+            m = this.mx - this.my;
+        } else if(this.mx < 0 && this.my > 0){
+            m = this.my - this.mx;
         } else {
-            m = mx + my;
+            m = this.mx + this.my;
         }
         
         if(m < 0){
@@ -25,10 +24,8 @@ class Bullet {
         var magnitude = sqrt(m);
         
         //gets magnitude and sets it so movement is based on magnitude
-        this.y = this.y + (my / magnitude) * 8;
-        this.x = this.x + (mx / magnitude) * 8;
-            
-         
+        this.y = this.y + (this.my / magnitude) * 2;
+        this.x = this.x + (this.mx / magnitude) * 2;
     }
   
     hit(enemy) {
