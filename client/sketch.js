@@ -60,8 +60,7 @@ function draw() {
 
   //show bullet and move it
   for(var i = bullets.length - 1; i >= 0; i--){
-    if (bullets[i].x > 2000 || bullets[i].y > 2000 || bullets[i].x < -2000 || bullets[i].y < -2000 
-     || bullets[i].x > window.innerWidth || bullets[i].y > window.innerHeight){
+    if (bullets[i].x > 2000 || bullets[i].y > 2000 || bullets[i].x < -2000 || bullets[i].y < -2000){
       bullets.splice(i,1);
     }
     else {
