@@ -60,7 +60,8 @@ function draw() {
 
   //show bullet and move it
   for(var i = bullets.length - 1; i >= 0; i--){
-    if (bullets[i].x > 2000 || bullets[i].y > 2000 || bullets[i].x < -2000 || bullets[i].y < -2000) {
+    if (bullets[i].x > 2000 || bullets[i].y > 2000 || bullets[i].x < -2000 || bullets[i].y < -2000 
+     || bullets[i].x > window.innerWidth || bullets[i].y > window.innerHeight){
       bullets.splice(i,1);
     }
     else {
@@ -130,6 +131,11 @@ function draw() {
       }
     }
   }
+}
+
+//allows for the screen to be resized and not mess up the drawing
+function windowResized(){
+  resizeCanvas(window.innerWidth, window.innerHeight);
 }
 
 function mousePressed(){
