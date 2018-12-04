@@ -50,6 +50,11 @@ function draw() {
   //scale the world as your character grows
   scale(slowScale);
   
+  //reset your circle if it dies
+  if (circle.health <= 0) {
+    circle = new Circle(random(-2000,2000), random(-2000, 2000), 64, 100);
+  }
+
   //translate the position of the character
   translate(-circle.pos.x, -circle.pos.y);
 
