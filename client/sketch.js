@@ -117,6 +117,11 @@ function draw() {
   }
 }
 
+//allows for the screen to be resized and not mess up the drawing
+function windowResized(){
+  resizeCanvas(window.innerWidth, window.innerHeight);
+}
+
 function mousePressed(){
   if(mouseIsPressed){
     var bullet = new Bullet(circle.pos.x, circle.pos.y);

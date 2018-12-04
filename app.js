@@ -58,12 +58,12 @@ io.sockets.on('connection',
 
     socket.on('disconnect', function() {
       console.log("Client has disconnected");
-      /*for (var i = 0; i < circles.length; i++){
+      for (var i = 0; i < circles.length; i++){
         if(socket.id == circles[i].id){
           console.log(circles[i].id);
           circles.splice(i, 1);
         }
-      }*/
+      }
     });
   }
 );
