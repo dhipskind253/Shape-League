@@ -6,6 +6,10 @@ class Bullet {
       this.r = 15;
     }
 
+    update() {
+        this.y
+    }
+
     move(){
         var mx = mouseX - width/2;
         var my = mouseY - height/2;

@@ -60,6 +60,7 @@ function draw() {
 
   //show bullet and move it
   for(var i = bullets.length - 1; i >= 0; i--){
+    if (bullets[i].x)
     bullets[i].showBullet();
     bullets[i].move();
 
