@@ -60,10 +60,19 @@ function draw() {
 
   //show bullet and move it
   for(var i = bullets.length - 1; i >= 0; i--){
-    if (bullets[i].x)
-    bullets[i].showBullet();
-    bullets[i].move();
-
+    if (bullets[i].x > 2000 || bullets[i].y > 2000 || bullets[i].x < -2000 || bullets[i].y < -2000) {
+      bullets.splice(i,1);
+    }
+    else {
+      bullets[i].showBullet();
+      bullets[i].move();
+    }
+    /*for (var i = 0; i < enemies.length; i++) {
+      if (bullets[i].hit(enemies[i])) {
+        bullets.splice(i,1);
+        enemies[i].health -= 5;
+      }
+    }*/
   }
 
   //draw the enemies on screen
