@@ -14,7 +14,7 @@ function setup() {
   //start socket connection to the server
   socket = io.connect('http://localhost:2000');
 
-  circle = new Circle(0, 0, 64, 100);
+  circle = new Circle(random(-1900,1900), random(-1900,1900), 64, 100);
 
   var data = {
     x: circle.pos.x,
@@ -112,31 +112,28 @@ function draw() {
 
   //show all little dots to eat
   for (var i = food.length - 1; i >= 0; i--) {
-    var size;
-    if(random(0,10) < 8){
-      size = 12;
-    } else {
-      size = 16
-    }
 
-    var foodData = {
-      id: 0,
-      x: random(-2000,2000),
-      y: random(-2000,2000),
-      r: size
-    };
-  
-    /*if (circle.eat(food[i])) {
+    //if food is eaten remove it and add new random food
+    if (circle.eat(food[i])) {
       food.splice(i, 1);
+      var size;
       if(random(0,10) < 8){
-        snack = new Circle(random(-2000,2000), random(-2000, 2000), 12);
+        size = 12;
       } else {
-        snack = new Circle(random(-2000,2000), random(-2000, 2000), 16)
+        size = 16
       }
-      //food.push(snack);
+
+      //create object to push onto food
+      var foodData = {
+        id: 0,
+        x: random(-2000,2000),
+        y: random(-2000,2000),
+        r: size
+      };
+    
       food.push(foodData);
     }
-    else {*/
+    else {
       if(food[i].r == 16){
         //show green food
         fill(100,255,0);
@@ -146,10 +143,10 @@ function draw() {
         fill(255);
         rect(food[i].x, food[i].y, food[i].r * 2, food[i].r * 2);
       }
-    //}
-    //console.log(food[i]);
+    }
   }
   
+  //only update if food array has food in it
   if(food.length != 0){
     socket.emit('foodUpdate', food);
   }

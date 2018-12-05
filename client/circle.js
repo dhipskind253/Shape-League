@@ -33,8 +33,9 @@ class Circle {
     }
   
     eat(food) {
-      var dist = p5.Vector.dist(this.pos, food.pos);
-      
+      var foodPos = createVector(food.x, food.y);
+      var dist = p5.Vector.dist(this.pos, foodPos);
+
       //if it goes half way into the other blob then eat it and add health
       if (dist < this.r + food.r/2) {
         /*var newArea = PI * food.r * food.r  + PI * this.r * this.r;
