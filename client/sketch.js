@@ -133,6 +133,7 @@ function draw() {
   textSize(30);
   text(circle.health, circle.pos.x, circle.pos.y);
 
+  var foodIndex;
   //show all little dots to eat
   for (var i = food.length - 1; i >= 0; i--) {
 
@@ -151,24 +152,14 @@ function draw() {
       socket.emit('enemyUpdate', selfIndex, enemies[selfIndex].health);
 
       food.splice(i, 1);
+      foodIndex = i;
+      if(food.length != 0){
+        //socket.emit('foodUpdate', food);
+        socket.emit('foodUpdate', foodIndex);
+      }
     }
 
-      var size;
-      if(random(0,10) < 8){
-        size = 12;
-      } else {
-        size = 16
-      }
-
-      //create object to push onto food
-      var foodData = {
-        id: 0,
-        x: random(-2000,2000),
-        y: random(-2000,2000),
-        r: size
-      };
-    
-      food.push(foodData);
+     
     }
     else {
       if(food[i].r == 16){
@@ -183,10 +174,6 @@ function draw() {
     }
   }
   
-  //only update if food array has food in it
-  if(food.length != 0){
-    socket.emit('foodUpdate', food);
-  }
 }
 
 //allows for the screen to be resized and not mess up the drawing

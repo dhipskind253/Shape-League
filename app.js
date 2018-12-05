@@ -91,14 +91,34 @@ io.sockets.on('connection',
           circle = circles[i];
         }
       }
-      circle.x = data.x;
-      circle.y = data.y;
-      circle.r = data.r;
+        circle.x = data.x;
+        circle.y = data.y;
+        circle.r = data.r; 
     });
 
     //update the food on display
-    socket.on('foodUpdate', function(data){
-      food = data;
+    socket.on('foodUpdate', function(index){
+      food.splice(index, 1);
+
+      var firstRandom = 1;
+      var secondRandom = 1;
+
+      if(Math.random() > .5){
+        firstRandom = -1;
+      }
+      
+      if(Math.random() > .5){
+        secondRandom = -1;
+      }
+
+      //decides if it should be health or not
+      var newFood;
+      if(Math.random() < .8){
+        newFood = new Circle(0, Math.random() * 2000 * firstRandom, Math.random() * 2000 * secondRandom, 12);
+      } else {
+        newFood = new Circle(0, Math.random() * 2000 * firstRandom, Math.random() * 2000 * secondRandom, 16)
+      }
+      food.push(newFood);
     });
 
     //if player disconnects remove them from circles array
@@ -113,3 +133,4 @@ io.sockets.on('connection',
     });
   }
 );
+
