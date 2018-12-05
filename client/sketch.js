@@ -139,6 +139,7 @@ function draw() {
     //if food is eaten remove it and add new random food
     if (circle.eat(food[i])) {
       //reassign own health
+     if(enemies.length != 0){
       if (food[i].r == 16) {
         enemies[selfIndex].health = enemies[selfIndex].health + 15;
       }
@@ -150,6 +151,7 @@ function draw() {
       socket.emit('enemyUpdate', selfIndex, enemies[selfIndex].health);
 
       food.splice(i, 1);
+    }
 
       var size;
       if(random(0,10) < 8){

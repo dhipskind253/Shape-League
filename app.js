@@ -107,7 +107,6 @@ io.sockets.on('connection',
       
       for (var i = 0; i < circles.length; i++){
         if(socket.id == circles[i].id){
-          console.log(circles[i].id);
           circles.splice(i, 1);
         }
       }
