@@ -15,7 +15,7 @@ function setup() {
   socket = io.connect('http://localhost:2000');
 
   circle = new Circle(random(-1900,1900), random(-1900,1900), 64, 100);
-
+  
   var data = {
     x: circle.pos.x,
     y: circle.pos.y,
