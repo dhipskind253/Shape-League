@@ -57,23 +57,29 @@ function draw() {
 
   //translate the position of the character
   translate(-circle.pos.x, -circle.pos.y);
-
+  
   //show bullet and move it
-  for(var i = bullets.length - 1; i >= 0; i--){
-    if (bullets[i].x > 2000 || bullets[i].y > 2000 || bullets[i].x < -2000 || bullets[i].y < -2000 
-     || bullets[i].x > window.innerWidth || bullets[i].y > window.innerHeight){
-      bullets.splice(i,1);
-    }
-    else {
-      bullets[i].showBullet();
-      bullets[i].move();
-    }
-    /*for (var i = 0; i < enemies.length; i++) {
-      if (bullets[i].hit(enemies[i])) {
-        bullets.splice(i,1);
-        enemies[i].health -= 5;
+  for(var i = bullets.length - 1; i >= 0; i--) {
+    for (var j = enemies.length - 1; j >= 0; j--) {
+      if (bullets[i]) {
+        if (bullets[i].x > 2000 || bullets[i].y > 2000 || bullets[i].x < -2000 || bullets[i].y < -2000){
+          bullets.splice(i,1);
+        }
       }
-    }*/
+      if (bullets[i]) {      
+        if (bullets[i].hit(enemies[j]) && enemies[j].id !== socket.id) {
+          enemies[j].health -= 5;
+          
+          //emit the update health data for enemies
+          socket.emit('enemyUpdate', j, enemies[j].health);
+          bullets.splice(i,1);
+        }
+      } 
+      if (bullets[i]) {
+        bullets[i].showBullet();
+        bullets[i].move();
+      }
+    }
   }
 
   //draw the enemies on screen
@@ -90,19 +96,24 @@ function draw() {
     }
   }
 
-
   //show initial circle and update position when moved
   circle.showCircle();
   circle.update();
   circle.constrain();
 
+
   var data = {
     x: circle.pos.x,
     y: circle.pos.y,
     r: circle.r,
-    health: circle.health
   };
   socket.emit('update', data);
+
+  for (var i = enemies.length - 1; i >= 0; i--) {
+    if (enemies[i].id == socket.id) {
+      circle.health = enemies[i].health;
+    }
+  }
 
   fill(255);
   noStroke();

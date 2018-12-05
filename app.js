@@ -39,8 +39,12 @@ io.sockets.on('connection',
     console.log("Connected: " + socket.id);
 
     socket.on('start', function(data){
-      var circle = new Circle(socket.id, data.x , data.y, data.r, data.health);
+      var circle = new Circle(socket.id, data.x , data.y, data.r, 100);
       circles.push(circle);
+    });
+
+    socket.on('enemyUpdate', function(index, newHealth) {
+      circles[index].health = newHealth;
     });
 
     socket.on('update', function(data){
@@ -53,7 +57,6 @@ io.sockets.on('connection',
       circle.x = data.x;
       circle.y = data.y;
       circle.r = data.r;
-      circle.health = data.health;
     });
 
     socket.on('disconnect', function() {
