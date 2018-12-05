@@ -38,15 +38,6 @@ class Circle {
 
       //if it goes half way into the other blob then eat it and add health
       if (dist < this.r + food.r/2) {
-        /*var newArea = PI * food.r * food.r  + PI * this.r * this.r;
-        this.r = sqrt(newArea / PI);*/
-  
-        //updates objects health if food is eaten
-        if(food.r == 16){
-          this.health = this.health + 15;
-        } else {
-          this.health = this.health - 5;
-        }
         return true;
       }
       return false;

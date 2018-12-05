@@ -75,11 +75,14 @@ io.sockets.on('connection',
 
     //on start up create circle in circles array
     socket.on('start', function(data){
-      var circle = new Circle(socket.id, data.x , data.y, data.r, data.health);
+      var circle = new Circle(socket.id, data.x , data.y, data.r, 100);
       circles.push(circle);
     });
 
-    //update clients position in array
+    socket.on('enemyUpdate', function(index, newHealth) {
+      circles[index].health = newHealth;
+    });
+
     socket.on('update', function(data){
       var circle;
       for (var i = 0; i < circles.length; i++){
@@ -91,7 +94,6 @@ io.sockets.on('connection',
       circle.x = data.x;
       circle.y = data.y;
       circle.r = data.r;
-      circle.health = data.health;
     });
 
     //update the food on display

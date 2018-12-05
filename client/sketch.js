@@ -1,5 +1,6 @@
 var socket;
 var id;
+var selfIndex;
 
 var circle;
 var food = [];
@@ -48,29 +49,48 @@ function draw() {
   //scale the world as your character grows
   scale(slowScale);
   
+  //set selfIndex
+  for (var i = enemies.length - 1; i >= 0; i--) {
+    if (enemies[i].id == socket.id) {
+      selfIndex = i;
+    }
+  }
+  
   //reset your circle if it dies
   if (circle.health <= 0) {
-    circle = new Circle(random(-2000,2000), random(-2000, 2000), 64, 100);
+    circle.pos.x = random(-2000,2000);
+    circle.pos.y = random(-2000,2000);
+    enemies[selfIndex].health = 100;
+
+    //emit the update health data for enemies
+    socket.emit('enemyUpdate', selfIndex, enemies[selfIndex].health);    
   }
 
   //translate the position of the character
   translate(-circle.pos.x, -circle.pos.y);
-
+  
   //show bullet and move it
-  for(var i = bullets.length - 1; i >= 0; i--){
-    if (bullets[i].x > 2000 || bullets[i].y > 2000 || bullets[i].x < -2000 || bullets[i].y < -2000){
-      bullets.splice(i,1);
-    }
-    else {
-      bullets[i].showBullet();
-      bullets[i].move();
-    }
-    /*for (var i = 0; i < enemies.length; i++) {
-      if (bullets[i].hit(enemies[i])) {
-        bullets.splice(i,1);
-        enemies[i].health -= 5;
+  for(var i = bullets.length - 1; i >= 0; i--) {
+    for (var j = enemies.length - 1; j >= 0; j--) {
+      if (bullets[i]) {
+        if (bullets[i].x > 2000 || bullets[i].y > 2000 || bullets[i].x < -2000 || bullets[i].y < -2000){
+          bullets.splice(i,1);
+        }
       }
-    }*/
+      if (bullets[i]) {      
+        if (bullets[i].hit(enemies[j]) && enemies[j].id !== socket.id) {
+          enemies[j].health -= 5;
+          
+          //emit the update health data for enemies
+          socket.emit('enemyUpdate', j, enemies[j].health);
+          bullets.splice(i,1);
+        }
+      } 
+      if (bullets[i]) {
+        bullets[i].showBullet();
+        bullets[i].move();
+      }
+    }
   }
 
   //draw the enemies on screen
@@ -88,7 +108,6 @@ function draw() {
     }
   }
 
-
   //show initial circle and update position when moved
   circle.showCircle();
   circle.update();
@@ -99,11 +118,15 @@ function draw() {
     x: circle.pos.x,
     y: circle.pos.y,
     r: circle.r,
-    health: circle.health
   };
   socket.emit('update', data);
 
-  //shows health on circle
+  //show your own health
+  for (var i = enemies.length - 1; i >= 0; i--) {
+    if (enemies[i].id == socket.id) {
+      circle.health = enemies[i].health;
+    }
+  }
   fill(255);
   noStroke();
   textAlign(CENTER);
@@ -115,7 +138,19 @@ function draw() {
 
     //if food is eaten remove it and add new random food
     if (circle.eat(food[i])) {
+      //reassign own health
+      if (food[i].r == 16) {
+        enemies[selfIndex].health = enemies[selfIndex].health + 15;
+      }
+      else {
+        enemies[selfIndex].health = enemies[selfIndex].health - 5;
+      }
+      
+      //emit the update health data for enemies
+      socket.emit('enemyUpdate', selfIndex, enemies[selfIndex].health);
+
       food.splice(i, 1);
+
       var size;
       if(random(0,10) < 8){
         size = 12;
