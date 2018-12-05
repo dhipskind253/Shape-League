@@ -60,15 +60,6 @@ class Circle {
       fill(200,123,33);
       ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2);
     }
-    showFood(){
-      fill(255);
-      rect(this.pos.x, this.pos.y, this.r * 2, this.r * 2);
-    }
-  
-    showHealth(){
-      fill(100,255,0);
-      ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2);
-    }
 
   }
 

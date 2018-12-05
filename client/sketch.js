@@ -22,22 +22,20 @@ function setup() {
     r: circle.r,
     health: circle.health
   };
+
+  //send start to server to add circle to array
   socket.emit('start', data);
 
+  //gets the enemies from server list
   socket.on('heartbeat', function(data){
     enemies = data;
   });
 
-  
-  //create little dots to eat
-  for (var i = 0; i < 500; i++) {
+  //gets the food from the server list
+  socket.on('dinner', function(data){
+    food = data;
+  });
 
-    if(random(0,10) < 8){
-      food[i] = new Circle(random(-2000,2000), random(-2000, 2000), 12);
-    } else {
-      food[i] = new Circle(random(-2000,2000), random(-2000, 2000), 16)
-    }
-  }
 }
 
 function draw() {
@@ -82,6 +80,7 @@ function draw() {
       fill(255, 0, 0);
       ellipse(enemies[i].x, enemies[i].y, enemies[i].r * 2, enemies[i].r * 2);
 
+      //shows health
       fill(255);
       textAlign(CENTER);
       textSize(30);
@@ -95,6 +94,7 @@ function draw() {
   circle.update();
   circle.constrain();
 
+  //gets circle data and sends it to update pos in server
   var data = {
     x: circle.pos.x,
     y: circle.pos.y,
@@ -103,6 +103,7 @@ function draw() {
   };
   socket.emit('update', data);
 
+  //shows health on circle
   fill(255);
   noStroke();
   textAlign(CENTER);
@@ -111,24 +112,46 @@ function draw() {
 
   //show all little dots to eat
   for (var i = food.length - 1; i >= 0; i--) {
-    if (circle.eat(food[i])) {
+    var size;
+    if(random(0,10) < 8){
+      size = 12;
+    } else {
+      size = 16
+    }
+
+    var foodData = {
+      id: 0,
+      x: random(-2000,2000),
+      y: random(-2000,2000),
+      r: size
+    };
+  
+    /*if (circle.eat(food[i])) {
       food.splice(i, 1);
       if(random(0,10) < 8){
         snack = new Circle(random(-2000,2000), random(-2000, 2000), 12);
       } else {
         snack = new Circle(random(-2000,2000), random(-2000, 2000), 16)
       }
-      food.push(snack);
+      //food.push(snack);
+      food.push(foodData);
     }
-    else {
+    else {*/
       if(food[i].r == 16){
         //show green food
-        food[i].showHealth();
+        fill(100,255,0);
+        ellipse(food[i].x, food[i].y, food[i].r * 2, food[i].r * 2);
       } else {
         //show white food
-        food[i].showFood();
+        fill(255);
+        rect(food[i].x, food[i].y, food[i].r * 2, food[i].r * 2);
       }
-    }
+    //}
+    //console.log(food[i]);
+  }
+  
+  if(food.length != 0){
+    socket.emit('foodUpdate', food);
   }
 }
 
