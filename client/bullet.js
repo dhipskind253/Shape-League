@@ -2,45 +2,26 @@ class Bullet {
     constructor(x, y) {
       this.x = x;
       this.y = y;
-      this.pos = createVector(this.x, this.y);
+      this.mx = mouseX - width/2;
+      this.my = mouseY - height/2;
+      this.pos = createVector(x,y);
       this.r = 15;
     }
 
-    update() {
-        this.y
-    }
-
     move(){
-        var mx = mouseX - width/2;
-        var my = mouseY - height/2;
-
-        var m;
-        if(mx > 0 && my < 0){
-            m = mx - my;
-        } else if(mx < 0 && my > 0){
-            m = my - mx;
-        } else {
-            m = mx + my;
-        }
-        
-        if(m < 0){
-            m = m * -1;
-        }
-        var magnitude = sqrt(m);
-        
-        //gets magnitude and sets it so movement is based on magnitude
-        this.y = this.y + (my / magnitude) * 8;
-        this.x = this.x + (mx / magnitude) * 8;
-            
-         
+        var vel = createVector(this.mx, this.my);
+        vel.setMag(15);
+        this.pos.add(vel);
+        this.x = this.pos.x;
+        this.y = this.pos.y;
     }
   
     hit(enemy) {
-      var dist = p5.Vector.dist(this.pos, enemy.pos);
+      var enemyPos = createVector(enemy.x, enemy.y);
+      var dist = p5.Vector.dist(this.pos, enemyPos);
       
-      //if it goes half way into the other blob then detract health
+      //if it hits the enemy blob then return true
       if (dist < this.r + enemy.r) {
-        enemy.health -= this.health
         return true;
       }
       return false;
