@@ -7,6 +7,7 @@ var food = [];
 var enemies = [];
 var slowScale = 1;
 var bullets = [];
+var enemiesBullets = [];
 
 
 function setup() {
@@ -35,6 +36,10 @@ function setup() {
   //gets the food from the server list
   socket.on('dinner', function(data){
     food = data;
+  });
+
+  socket.on('arsenal', function(data){
+    enemiesBullets = data;
   });
 
 }
@@ -92,6 +97,53 @@ function draw() {
       }
     }
   }
+
+  //display enemies bullets
+  for(var i = enemiesBullets.length - 1; i >= 0; i--){
+    if(enemiesBullets[i]){
+      var x = parseFloat(enemiesBullets[i].x);
+      var y = parseFloat(enemiesBullets[i].y);
+
+      var vel = createVector(parseFloat(enemiesBullets[i].mx), parseFloat(enemiesBullets[i].my));
+      vel.setMag(15);
+      var pos = createVector(x, y);
+      pos.add(vel);
+    }
+
+    for (var j = enemies.length - 1; j >= 0; j--) {
+
+        //make sure bullet can't hit self
+        if(enemiesBullets[i]){
+          if(enemiesBullets[i].id != socket.id){ 
+            if (x > 2000 || y > 2000 || x < -2000 || y < -2000){
+              enemiesBullets.splice(i,1);
+            }
+          } else{
+            enemiesBullets.splice(i,1);
+          }
+        }
+
+        if (enemiesBullets[i]) {
+          var enemyPos = createVector(enemies[j].x, enemies[j].y);
+          var dist = p5.Vector.dist(pos, enemyPos);
+          
+          //if it hits the enemy blob then return true
+          if (dist < 79 && enemies[j].id !== socket.id) {
+            enemiesBullets.splice(i,1);
+          }
+        }
+
+        if(enemiesBullets[i]){
+          fill(255);
+          ellipse(x, y, 15, 15);
+          enemiesBullets[i].x = pos.x;
+          enemiesBullets[i].y = pos.y;
+          socket.emit('updatebulletpos', enemiesBullets[i].x, enemiesBullets[i].y, i);
+        }
+      
+    }
+  }
+  
 
   //draw the enemies on screen
   for (var i = enemies.length - 1; i >=0; i--){
@@ -180,9 +232,10 @@ function windowResized(){
   resizeCanvas(window.innerWidth, window.innerHeight);
 }
 
-function mousePressed(){
-  if(mouseIsPressed){
+function mouseClicked(){
     var bullet = new Bullet(circle.pos.x, circle.pos.y);
     bullets.push(bullet);
-  }
+    for(var i = 0; i < bullets.length; i++){
+      socket.emit('bulletfire', socket.id, bullets[i].x, bullets[i].y, bullets[i].mx, bullets[i].my);
+    }
 }

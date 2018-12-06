@@ -3,6 +3,7 @@ var app = express();
 
 var circles = [];
 var food = [];
+var bullets = [];
 
 function Circle (id, x, y, r, health){
   this.id = id;
@@ -10,6 +11,14 @@ function Circle (id, x, y, r, health){
   this.y = y;
   this.r = r;
   this.health = health;
+}
+
+function Bullet (id, x, y, mx, my){
+  this.id = id;
+  this.x = x;
+  this.y = y;
+  this.mx = mx;
+  this.my = my;
 }
 
 //process.env.PORT used with deploying on heroku
@@ -31,6 +40,11 @@ setInterval(heartbeat, 33);
 //sends all enemies to clients
 function heartbeat(){
   io.sockets.emit('heartbeat', circles);
+};
+
+setInterval(arsenal, 10);
+function arsenal(){
+  io.sockets.emit('arsenal', bullets);
 };
 
 var firstRandom;
@@ -65,6 +79,8 @@ function dinner(){
   io.sockets.emit('dinner', food);
 }
 
+
+
 // Register a callback function to run when we have an individual connection
 // This is run for each individual user that connects
 io.sockets.on('connection',
@@ -91,9 +107,11 @@ io.sockets.on('connection',
           circle = circles[i];
         }
       }
+      if(circle){
         circle.x = data.x;
         circle.y = data.y;
         circle.r = data.r; 
+      }
     });
 
     //update the food on display
@@ -119,6 +137,24 @@ io.sockets.on('connection',
         newFood = new Circle(0, Math.random() * 2000 * firstRandom, Math.random() * 2000 * secondRandom, 16)
       }
       food.push(newFood);
+    });
+
+    socket.on('bulletfire', function(id, x, y, mx, my){
+      //bullets = data;
+      var bullet;
+      bullet = new Bullet(id, x, y, mx, my);
+      bullets.push(bullet);
+    });
+
+    socket.on('updatebulletpos', function(x, y, i){
+      if(bullets[i]){
+        if (x > 2000 || y > 2000 || x < -2000 || y < -2000){
+          bullets.splice(i,1);
+        } else {
+          bullets[i].x = x;
+          bullets[i].y = y;
+        }
+      }
     });
 
     //if player disconnects remove them from circles array
