@@ -80,7 +80,7 @@ io.sockets.on('connection',
     });
 
     socket.on('enemyUpdate', function(index, newHealth) {
-      circles[index].health = newHealth;
+        circles[index].health = newHealth;
     });
 
     socket.on('update', function(data){
