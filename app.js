@@ -40,6 +40,10 @@ setInterval(heartbeat, 33);
 //sends all enemies to clients
 function heartbeat(){
   io.sockets.emit('heartbeat', circles);
+};
+
+setInterval(arsenal, 10);
+function arsenal(){
   io.sockets.emit('arsenal', bullets);
 };
 
@@ -75,6 +79,8 @@ function dinner(){
   io.sockets.emit('dinner', food);
 }
 
+
+
 // Register a callback function to run when we have an individual connection
 // This is run for each individual user that connects
 io.sockets.on('connection',
@@ -101,9 +107,11 @@ io.sockets.on('connection',
           circle = circles[i];
         }
       }
+      if(circle){
         circle.x = data.x;
         circle.y = data.y;
         circle.r = data.r; 
+      }
     });
 
     //update the food on display
@@ -139,13 +147,15 @@ io.sockets.on('connection',
     });
 
     socket.on('updatebulletpos', function(x, y, i){
-        bullets[i].x = x;
-        bullets[i].y = y;
+      if(bullets[i]){
+        if (x > 2000 || y > 2000 || x < -2000 || y < -2000){
+          bullets.splice(i,1);
+        } else {
+          bullets[i].x = x;
+          bullets[i].y = y;
+        }
+      }
     });
-
-    /*socket.on('bullethit', function(i){
-      bullets.splice(i,1);
-    });*/
 
     //if player disconnects remove them from circles array
     socket.on('disconnect', function() {

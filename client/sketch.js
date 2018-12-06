@@ -115,10 +115,11 @@ function draw() {
         //make sure bullet can't hit self
         if(enemiesBullets[i]){
           if(enemiesBullets[i].id != socket.id){ 
-            if (enemiesBullets[i].x > 2000 || enemiesBullets[i].y > 2000 || enemiesBullets[i].x < -2000 || enemiesBullets[i].y < -2000){
+            if (x > 2000 || y > 2000 || x < -2000 || y < -2000){
               enemiesBullets.splice(i,1);
-              //socket.emit('bullethit', i);
             }
+          } else{
+            enemiesBullets.splice(i,1);
           }
         }
 
@@ -127,15 +128,13 @@ function draw() {
           var dist = p5.Vector.dist(pos, enemyPos);
           
           //if it hits the enemy blob then return true
-          if (dist < 79) {
+          if (dist < 79 && enemies[j].id !== socket.id) {
             enemiesBullets.splice(i,1);
-            //socket.emit('bullethit', i);
           }
-        } 
+        }
 
         if(enemiesBullets[i]){
           fill(255);
-          console.log(x + " " + y + " "+ pos.y);
           ellipse(x, y, 15, 15);
           enemiesBullets[i].x = pos.x;
           enemiesBullets[i].y = pos.y;
