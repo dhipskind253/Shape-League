@@ -124,7 +124,8 @@ function draw() {
   //show your own health
   for (var i = enemies.length - 1; i >= 0; i--) {
     if (enemies[i].id == socket.id) {
-      circle.health = enemies[i].health;
+      selfIndex = i;
+      circle.health = enemies[selfIndex].health;
     }
   }
   fill(255);
