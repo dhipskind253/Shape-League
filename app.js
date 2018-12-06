@@ -3,6 +3,7 @@ var app = express();
 
 var circles = [];
 var food = [];
+var bullets = [];
 
 function Circle (id, x, y, r, health){
   this.id = id;
@@ -10,6 +11,14 @@ function Circle (id, x, y, r, health){
   this.y = y;
   this.r = r;
   this.health = health;
+}
+
+function Bullet (id, x, y, mx, my){
+  this.id = id;
+  this.x = x;
+  this.y = y;
+  this.mx = mx;
+  this.my = my;
 }
 
 //process.env.PORT used with deploying on heroku
@@ -31,6 +40,7 @@ setInterval(heartbeat, 33);
 //sends all enemies to clients
 function heartbeat(){
   io.sockets.emit('heartbeat', circles);
+  io.sockets.emit('arsenal', bullets);
 };
 
 var firstRandom;
@@ -120,6 +130,22 @@ io.sockets.on('connection',
       }
       food.push(newFood);
     });
+
+    socket.on('bulletfire', function(id, x, y, mx, my){
+      //bullets = data;
+      var bullet;
+      bullet = new Bullet(id, x, y, mx, my);
+      bullets.push(bullet);
+    });
+
+    socket.on('updatebulletpos', function(x, y, i){
+        bullets[i].x = x;
+        bullets[i].y = y;
+    });
+
+    /*socket.on('bullethit', function(i){
+      bullets.splice(i,1);
+    });*/
 
     //if player disconnects remove them from circles array
     socket.on('disconnect', function() {
